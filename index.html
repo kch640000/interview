@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Speaking Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f5f2; --card:#ffffff; --ink:#26282b; --sub:#6b6f75; --line:#e2e0db;
+    --c1:#3f6e8c; --c1-soft:#e8f0f5; --c2:#6b7f4f; --c2-soft:#eef2e7; --done:#9a9a9a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif}
+  .wrap{max-width:1100px;margin:0 auto;padding:20px 16px 40px}
+  header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+  h1{font-size:22px;margin:0;font-weight:700}
+  h1 small{display:block;font-size:13px;color:var(--sub);font-weight:400;margin-top:2px}
+
+  .student-bar{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+  .student-bar label{font-size:14px;color:var(--sub)}
+  .student-bar input{width:70px;font-size:16px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;text-align:center;font-family:inherit}
+  .num{font-size:28px;font-weight:700;min-width:70px;text-align:center}
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:10px;font-size:15px;padding:9px 14px}
+  .btn-ghost{background:#efeee9;color:var(--ink)}
+  .btn-ghost:hover{background:#e5e3dc}
+  .btn-next{background:var(--ink);color:#fff;font-weight:700;padding:10px 18px}
+  .btn-next:hover{opacity:.88}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:760px){.cards{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;min-height:300px}
+  .card h2{margin:0 0 4px;font-size:18px}
+  .card .range{font-size:13px;color:var(--sub);margin-bottom:12px}
+  .card.i1 h2{color:var(--c1)} .card.i2 h2{color:var(--c2)}
+  .qbox{flex:1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;margin-bottom:14px}
+  .i1 .qbox{background:var(--c1-soft)} .i2 .qbox{background:var(--c2-soft)}
+  .qno{font-size:14px;font-weight:700;color:var(--sub);margin-bottom:8px;min-height:20px}
+  .qtext{font-size:30px;line-height:1.35;font-weight:700}
+  .qtext.empty{font-size:17px;font-weight:400;color:var(--sub)}
+  .qtext.rolling{opacity:.45}
+  .actions{display:flex;gap:8px}
+  .actions button{flex:1}
+  .btn-draw{color:#fff;font-weight:700;font-size:17px;padding:12px}
+  .i1 .btn-draw{background:var(--c1)} .i2 .btn-draw{background:var(--c2)}
+  .btn-draw:disabled{opacity:.4;cursor:default}
+  .btn-done{background:#efeee9;color:var(--ink)}
+  .btn-done.on{background:var(--done);color:#fff}
+
+  .record{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+  .record-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+  .record h3{margin:0;font-size:16px}
+  .count{font-size:13px;color:var(--sub);margin-left:6px;font-weight:400}
+  .tablewrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+  th{color:var(--sub);font-weight:500;white-space:nowrap}
+  td.n{font-weight:700;white-space:nowrap}
+  td .ok{color:var(--c2);font-weight:700}
+  td .no{color:#c0392b}
+  tr.cur{background:#faf9f5}
+  .empty-row{color:var(--sub);text-align:center;padding:16px}
+  .stats{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--sub)}
+  .stats span{background:#f1f0ec;border-radius:20px;padding:3px 9px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Be the Angus of Our Town! <small>직업인 인터뷰 말하기 수행평가 랜덤 질문</small></h1>
+    <div class="student-bar">
+      <label for="cls">반</label>
+      <input id="cls" type="text" placeholder="예: 2-3">
+      <button class="btn-ghost" id="prevBtn" title="이전 학생">◀</button>
+      <div class="num"><span id="stuNum">1</span>번</div>
+      <button class="btn-next" id="nextBtn">다음 학생 ▶</button>
+    </div>
+  </header>
+
+  <div class="cards">
+    <section class="card i1">
+      <h2>Interview 1</h2>
+      <div class="range">질문 1~3 중 랜덤</div>
+      <div class="qbox">
+        <div class="qno" id="q1no"></div>
+        <div class="qtext empty" id="q1text">버튼을 누르면 질문이 나옵니다.</div>
+      </div>
+      <div class="actions">
+        <button class="btn-draw" id="draw1">질문 뽑기</button>
+        <button class="btn-done" id="done1">말하기 완료</button>
+      </div>
+    </section>
+
+    <section class="card i2">
+      <h2>Interview 2</h2>
+      <div class="range">질문 4~6 중 랜덤</div>
+      <div class="qbox">
+        <div class="qno" id="q2no"></div>
+        <div class="qtext empty" id="q2text">버튼을 누르면 질문이 나옵니다.</div>
+      </div>
+      <div class="actions">
+        <button class="btn-draw" id="draw2">질문 뽑기</button>
+        <button class="btn-done" id="done2">말하기 완료</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="record">
+    <div class="record-head">
+      <h3>진행 기록<span class="count" id="countInfo"></span></h3>
+      <div style="display:flex;gap:6px">
+        <button class="btn-ghost" id="redrawBtn">이 학생 다시 뽑기</button>
+        <button class="btn-ghost" id="resetBtn">기록 전체 지우기</button>
+      </div>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>번호</th><th>Interview 1</th><th>완료</th><th>Interview 2</th><th>완료</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="stats" id="stats"></div>
+  </section>
+</div>
+
+<script>
+const Q = {
+  1: "Can you tell me why you chose your job?",
+  2: "I wonder where you will do your volunteer work.",
+  3: "I want to know what you will do for our town.",
+  4: "What makes you excited about your job?",
+  5: "How will you make our town better?",
+  6: "What will make people happy after your volunteer work?"
+};
+const POOL = {1:[1,2,3], 2:[4,5,6]};
+const KEY = "angus_interview_v1";
+
+let state = {cls:"", cur:1, rec:{}};
+try{ const s = localStorage.getItem(KEY); if(s) state = Object.assign(state, JSON.parse(s)); }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+const $ = id => document.getElementById(id);
+function rec(n){ if(!state.rec[n]) state.rec[n] = {a:null,b:null,da:false,db:false}; return state.rec[n]; }
+
+function render(){
+  $("cls").value = state.cls || "";
+  $("stuNum").textContent = state.cur;
+  const r = state.rec[state.cur] || {};
+  showQ(1, r.a); showQ(2, r.b);
+  $("draw1").disabled = !!r.a; $("draw2").disabled = !!r.b;
+  $("done1").classList.toggle("on", !!r.da); $("done1").textContent = r.da ? "완료됨 ✓" : "말하기 완료";
+  $("done2").classList.toggle("on", !!r.db); $("done2").textContent = r.db ? "완료됨 ✓" : "말하기 완료";
+  renderTable();
+}
+function showQ(slot, q){
+  const t = $("q"+slot+"text"), no = $("q"+slot+"no");
+  t.classList.remove("rolling");
+  if(q){ no.textContent = "Question " + q; t.textContent = Q[q]; t.classList.remove("empty"); }
+  else { no.textContent = ""; t.textContent = "버튼을 누르면 질문이 나옵니다."; t.classList.add("empty"); }
+}
+
+function draw(slot){
+  const r = rec(state.cur);
+  const key = slot===1 ? "a" : "b";
+  if(r[key]) return;
+  const pool = POOL[slot];
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  const t = $("q"+slot+"text"), no = $("q"+slot+"no");
+  $("draw"+slot).disabled = true;
+  t.classList.remove("empty"); t.classList.add("rolling");
+  let i = 0;
+  const iv = setInterval(()=>{
+    const q = pool[i % pool.length]; i++;
+    no.textContent = "Question " + q; t.textContent = Q[q];
+  }, 70);
+  setTimeout(()=>{
+    clearInterval(iv);
+    r[key] = pick; save(); render();
+  }, 600);
+}
+
+function toggleDone(slot){
+  const r = rec(state.cur);
+  const k = slot===1 ? "da" : "db";
+  r[k] = !r[k]; save(); render();
+}
+
+function renderTable(){
+  const nums = Object.keys(state.rec).map(Number).filter(n=>{
+    const r = state.rec[n]; return r && (r.a || r.b);
+  }).sort((a,b)=>a-b);
+  const tb = $("tbody");
+  if(!nums.length){ tb.innerHTML = '<tr><td colspan="5" class="empty-row">아직 기록이 없습니다.</td></tr>'; }
+  else {
+    tb.innerHTML = nums.map(n=>{
+      const r = state.rec[n];
+      const cell = q => q ? `<b>Q${q}</b> ${Q[q]}` : '-';
+      const ck = d => d ? '<span class="ok">✓</span>' : '<span class="no">·</span>';
+      return `<tr class="${n===state.cur?'cur':''}" data-n="${n}" style="cursor:pointer">
+        <td class="n">${n}번</td><td>${cell(r.a)}</td><td>${ck(r.da)}</td><td>${cell(r.b)}</td><td>${ck(r.db)}</td></tr>`;
+    }).join("");
+    tb.querySelectorAll("tr[data-n]").forEach(tr=>tr.onclick=()=>{ state.cur=+tr.dataset.n; save(); render(); });
+  }
+  const done = nums.filter(n=>state.rec[n].da && state.rec[n].db).length;
+  $("countInfo").textContent = nums.length ? `(${nums.length}명 진행, ${done}명 모두 완료)` : "";
+  const cnt = {1:0,2:0,3:0,4:0,5:0,6:0};
+  nums.forEach(n=>{ const r=state.rec[n]; if(r.a) cnt[r.a]++; if(r.b) cnt[r.b]++; });
+  $("stats").innerHTML = nums.length ? Object.keys(cnt).map(k=>`<span>Q${k}: ${cnt[k]}회</span>`).join("") : "";
+}
+
+$("draw1").onclick = ()=>draw(1);
+$("draw2").onclick = ()=>draw(2);
+$("done1").onclick = ()=>toggleDone(1);
+$("done2").onclick = ()=>toggleDone(2);
+$("nextBtn").onclick = ()=>{ state.cur++; save(); render(); };
+$("prevBtn").onclick = ()=>{ if(state.cur>1){ state.cur--; save(); render(); } };
+$("cls").oninput = e=>{ state.cls = e.target.value; save(); };
+$("redrawBtn").onclick = ()=>{
+  if(!state.rec[state.cur]) return;
+  if(confirm(state.cur+"번 학생의 질문을 지우고 다시 뽑을까요?")){ delete state.rec[state.cur]; save(); render(); }
+};
+$("resetBtn").onclick = ()=>{
+  if(confirm("모든 기록을 지우고 1번부터 다시 시작할까요? (다음 반 시작할 때 사용)")){
+    state = {cls:"", cur:1, rec:{}}; save(); render();
+  }
+};
+document.addEventListener("keydown", e=>{
+  if(e.target.tagName==="INPUT") return;
+  if(e.key==="ArrowRight") $("nextBtn").click();
+  if(e.key==="ArrowLeft") $("prevBtn").click();
+});
+render();
+</script>
+</body>
+</html>
